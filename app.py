@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
+import joblib
 
 from sklearn.metrics import (
     accuracy_score,
@@ -51,8 +52,8 @@ st.write(
 MODEL_PATHS = {
     "Logistic Regression": "model/logistic_regression.pkl",
     "Decision Tree": "model/decision_tree.pkl",
-    "K-Nearest Neighbors": "model/knn.pkl",
-    "Naive Bayes": "model/naive_bayes.pkl",
+    "K-Nearest Neighbors": "model/knn_model.pkl",
+    "Naive Bayes": "model/nb_model.pkl",
     "Random Forest": "model/random_forest.pkl"
 }
 
@@ -64,8 +65,7 @@ MODEL_PATHS = {
 @st.cache_resource
 def load_pickle(file_path):
 
-    with open(file_path, "rb") as file:
-        return pickle.load(file)
+    return joblib.load(file_path)
 
 
 # ============================================================
@@ -125,31 +125,32 @@ selected_model = st.sidebar.selectbox(
 # DATASET UPLOAD
 # ============================================================
 
-st.header("1. Upload Test Dataset")
+# st.header("1. Upload Test Dataset")
 
-uploaded_file = st.file_uploader(
-    "Upload test_data.csv",
-    type=["csv"]
-)
+# uploaded_file = st.file_uploader(
+#     "Upload test_data.csv",
+#     type=["csv"]
+# )
 
 
-if uploaded_file is None:
+# if uploaded_file is None:
 
-    st.info(
-        "Please upload the test_data.csv file to evaluate "
-        "the classification models."
-    )
+#     st.info(
+#         "Please upload the test_data.csv file to evaluate "
+#         "the classification models."
+#     )
 
-    st.stop()
+#     st.stop()
 
 
 # ============================================================
 # READ TEST DATA
 # ============================================================
+TEST_DATA_PATH = "test_data.csv"
 
 try:
 
-    test_data = pd.read_csv(uploaded_file)
+    test_data = pd.read_csv(TEST_DATA_PATH)
 
 except Exception as e:
 
@@ -158,7 +159,7 @@ except Exception as e:
     st.stop()
 
 
-st.success("Test dataset uploaded successfully!")
+st.success("Using the test_data.csv file")
 
 
 # ============================================================
@@ -243,7 +244,7 @@ expected_features = [
     "Perimeter",
     "MajorAxisLength",
     "MinorAxisLength",
-    "AspectRatio",
+    "AspectRation",
     "Eccentricity",
     "ConvexArea",
     "EquivDiameter",
